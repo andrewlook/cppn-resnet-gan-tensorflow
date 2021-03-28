@@ -27,7 +27,7 @@ https://en.wikipedia.org/wiki/Compositional_pattern-producing_network
 """
 
 
-class CPPNVAE:
+class CPPNResnet:
     def __init__(
         self,
         batch_size=1,
@@ -46,7 +46,7 @@ class CPPNVAE:
         net_size_q=512,
         keep_prob=1.0,
         df_dim=32,
-        model_name="cppnvae",
+        model_name="cppn_resnet",
         grad_clip=5.0,
     ):
         """

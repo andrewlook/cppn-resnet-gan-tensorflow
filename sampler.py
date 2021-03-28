@@ -33,7 +33,7 @@ import tensorflow as tf
 from images2gif import writeGif
 from PIL import Image
 
-from model import CPPNVAE
+from model import CPPNResnet
 
 mgc = get_ipython().magic
 mgc(u"matplotlib inline")
@@ -44,7 +44,7 @@ pylab.rcParams["figure.figsize"] = (10.0, 10.0)
 class Sampler:
     def __init__(self):
         self.mnist = None
-        self.model = CPPNVAE()
+        self.model = CPPNResnet()
         self.z = self.generate_z()
 
     def load_model(self):

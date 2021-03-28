@@ -7,7 +7,7 @@ import tensorflow as tf
 from six.moves import cPickle
 
 from mnist_data import *
-from model import CPPNVAE
+from model import CPPNResnet
 
 """
 cppn vae:
@@ -80,7 +80,7 @@ def train(args):
     mnist = read_data_sets()
     n_samples = mnist.num_examples
 
-    cppnvae = CPPNVAE(
+    cppn_resnet = CPPNResnet(
         batch_size=batch_size,
         learning_rate_g=learning_rate_g,
         learning_rate_d=learning_rate_d,
@@ -92,7 +92,7 @@ def train(args):
     # load previously trained model if appilcable
     ckpt = tf.train.get_checkpoint_state(dirname)
     if ckpt:
-        cppnvae.load_model(dirname)
+        cppn_resnet.load_model(dirname)
 
     counter = 0
 
@@ -124,7 +124,7 @@ def train(args):
                 g_accuracy,
                 d_loss_real,
                 d_loss_fake,
-            ) = cppnvae.partial_train(batch_images, batch_labels)
+            ) = cppn_resnet.partial_train(batch_images, batch_labels)
 
             assert vae_loss < 1000000  # make sure it is not NaN or Inf
             assert d_loss < 1000000  # make sure it is not NaN or Inf
@@ -198,11 +198,11 @@ def train(args):
         # save model
         if epoch >= 0 and epoch % checkpoint_step == 0:
             checkpoint_path = os.path.join("save", "model.ckpt")
-            cppnvae.save_model(checkpoint_path, epoch)
+            cppn_resnet.save_model(checkpoint_path, epoch)
             print("model saved to {}".format(checkpoint_path))
 
     # save model one last time, under zero label to denote finish.
-    cppnvae.save_model(checkpoint_path, 0)
+    cppn_resnet.save_model(checkpoint_path, 0)
 
 
 if __name__ == "__main__":
