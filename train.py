@@ -195,15 +195,23 @@ def train(args):
                 "avg_vae_loss=",
                 "{:.6f}".format(avg_vae_loss),
             )
-            cppn_resnet.writer.add_summary(
-                cppn_resnet.sess.run(cppn_resnet.summ_vae_loss), epoch
+            metrics = dict(
+                avg_d_loss=avg_d_loss,
+                avg_d_real=avg_d_loss_real,
+                avg_d_fake=avg_d_loss_fake,
+                avg_q_loss=avg_q_loss,
+                avg_vae_loss=avg_vae_loss,
+                d_real_accuracy=avg_d_real_accuracy,
+                d_fake_accuracy=avg_d_fake_accuracy,
+                g_accuracy=avg_g_accuracy,
             )
-            cppn_resnet.writer.add_summary(
-                cppn_resnet.sess.run(cppn_resnet.summ_d_loss), epoch
-            )
-            cppn_resnet.writer.add_summary(
-                cppn_resnet.sess.run(cppn_resnet.summ_g_loss), epoch
-            )
+            for key in sorted(metrics):
+                summary = tf.Summary(
+                    value=[
+                        tf.Summary.Value(tag=key, simple_value=metrics[key]),
+                    ]
+                )
+                cppn_resnet.writer.add_summary(summary, global_step)
             cppn_resnet.writer.flush()
 
         # save model
