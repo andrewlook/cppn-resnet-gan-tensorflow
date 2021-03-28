@@ -2,9 +2,9 @@ import argparse
 import os
 import time
 
-import cPickle
 import numpy as np
 import tensorflow as tf
+from six.moves import cPickle
 
 from mnist_data import *
 from model import CPPNVAE
@@ -137,24 +137,29 @@ def train(args):
 
             # Display logs per epoch step
             if (counter + 1) % display_step == 0:
-                print "Sample:", "%d" % ((i + 1) * batch_size), " Epoch:", "%d" % (
-                    epoch
-                ), "d_loss=", "{:.4f}".format(d_loss), "d_real=", "{:.4f}".format(
-                    d_loss_real
-                ), "d_fake=", "{:.4f}".format(
-                    d_loss_fake
-                ), "g_loss=", "{:.4f}".format(
-                    g_loss
-                ), "vae_loss=", "{:.4f}".format(
-                    vae_loss
-                ), "d_real_accuracy=", "{:.2f}".format(
-                    d_real_accuracy
-                ), "d_fake_accuracy=", "{:.2f}".format(
-                    d_fake_accuracy
-                ), "g_accuracy=", "{:.2f}".format(
-                    g_accuracy
-                ), "n_op=", "%d" % (
-                    n_operations
+                print(
+                    "Sample:",
+                    "%d" % ((i + 1) * batch_size),
+                    " Epoch:",
+                    "%d" % (epoch),
+                    "d_loss=",
+                    "{:.4f}".format(d_loss),
+                    "d_real=",
+                    "{:.4f}".format(d_loss_real),
+                    "d_fake=",
+                    "{:.4f}".format(d_loss_fake),
+                    "g_loss=",
+                    "{:.4f}".format(g_loss),
+                    "vae_loss=",
+                    "{:.4f}".format(vae_loss),
+                    "d_real_accuracy=",
+                    "{:.2f}".format(d_real_accuracy),
+                    "d_fake_accuracy=",
+                    "{:.2f}".format(d_fake_accuracy),
+                    "g_accuracy=",
+                    "{:.2f}".format(g_accuracy),
+                    "n_op=",
+                    "%d" % (n_operations),
                 )
             counter += 1
             # Compute average loss
@@ -169,29 +174,32 @@ def train(args):
 
         # Display logs per epoch step
         if epoch >= 0:
-            print "Epoch:", "%04d" % (epoch), "avg_d_loss=", "{:.6f}".format(
-                avg_d_loss
-            ), "avg_d_real=", "{:.6f}".format(
-                avg_d_loss_real
-            ), "avg_d_fake=", "{:.6f}".format(
-                avg_d_loss_fake
-            ), "avg_q_loss=", "{:.6f}".format(
-                avg_q_loss
-            ), "d_real_accuracy=", "{:.2f}".format(
-                avg_d_real_accuracy
-            ), "d_fake_accuracy=", "{:.2f}".format(
-                avg_d_fake_accuracy
-            ), "g_accuracy=", "{:.2f}".format(
-                avg_g_accuracy
-            ), "avg_vae_loss=", "{:.6f}".format(
-                avg_vae_loss
+            print(
+                "Epoch:",
+                "%04d" % (epoch),
+                "avg_d_loss=",
+                "{:.6f}".format(avg_d_loss),
+                "avg_d_real=",
+                "{:.6f}".format(avg_d_loss_real),
+                "avg_d_fake=",
+                "{:.6f}".format(avg_d_loss_fake),
+                "avg_q_loss=",
+                "{:.6f}".format(avg_q_loss),
+                "d_real_accuracy=",
+                "{:.2f}".format(avg_d_real_accuracy),
+                "d_fake_accuracy=",
+                "{:.2f}".format(avg_d_fake_accuracy),
+                "g_accuracy=",
+                "{:.2f}".format(avg_g_accuracy),
+                "avg_vae_loss=",
+                "{:.6f}".format(avg_vae_loss),
             )
 
         # save model
         if epoch >= 0 and epoch % checkpoint_step == 0:
             checkpoint_path = os.path.join("save", "model.ckpt")
             cppnvae.save_model(checkpoint_path, epoch)
-            print "model saved to {}".format(checkpoint_path)
+            print("model saved to {}".format(checkpoint_path))
 
     # save model one last time, under zero label to denote finish.
     cppnvae.save_model(checkpoint_path, 0)
