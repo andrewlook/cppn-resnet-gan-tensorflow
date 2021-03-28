@@ -235,7 +235,8 @@ class CPPNResnet:
         self.saver = tf.train.Saver(var_list=self.trainable_vars, max_to_keep=50)
 
         # initialize writer for tensorboard logs
-        self.logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.logdir = "logs/"
+        # self.logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
         self.writer = tf.summary.FileWriter(self.logdir)
 
     def reinit(self):

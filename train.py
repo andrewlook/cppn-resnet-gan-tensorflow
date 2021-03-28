@@ -220,9 +220,9 @@ def train(args):
             cppn_resnet.save_model(checkpoint_path, epoch)
             print("model saved to {}".format(checkpoint_path))
 
-    cppn_resnet.writer.close()
     # save model one last time, under zero label to denote finish.
     cppn_resnet.save_model(checkpoint_path, 0)
+    cppn_resnet.writer.close()
 
 
 if __name__ == "__main__":
