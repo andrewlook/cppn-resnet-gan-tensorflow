@@ -211,7 +211,7 @@ def train(args):
                         tf.Summary.Value(tag=key, simple_value=metrics[key]),
                     ]
                 )
-                cppn_resnet.writer.add_summary(summary, global_step)
+                cppn_resnet.writer.add_summary(summary, epoch)
             cppn_resnet.writer.flush()
 
         # save model
