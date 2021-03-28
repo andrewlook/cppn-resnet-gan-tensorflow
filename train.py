@@ -74,7 +74,7 @@ def train(args):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
-    with open(os.path.join(dirname, "config.pkl"), "w") as f:
+    with open(os.path.join(dirname, "config.pkl"), "wb") as f:
         cPickle.dump(args, f)
 
     mnist = read_data_sets()

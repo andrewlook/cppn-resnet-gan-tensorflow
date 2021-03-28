@@ -125,7 +125,9 @@ class CPPNVAE:
         # Draw one sample z from Gaussian distribution
         eps = tf.random_normal((self.batch_size, self.z_dim), 0, 1, dtype=tf.float32)
         # z = mu + sigma*epsilon
-        self.z = tf.add(self.z_mean, tf.mul(tf.sqrt(tf.exp(self.z_log_sigma_sq)), eps))
+        self.z = tf.add(
+            self.z_mean, tf.multiply(tf.sqrt(tf.exp(self.z_log_sigma_sq)), eps)
+        )
 
         # Use generator to determine mean of
         # Bernoulli distribution of reconstructed input
