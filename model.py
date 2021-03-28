@@ -176,19 +176,25 @@ class CPPNVAE:
             tf.gradients(self.vae_loss, self.q_vars), self.grad_clip
         )
 
-        d_real_optimizer = tf.train.AdamOptimizer(
-            self.learning_rate_d, beta1=self.beta1
-        )
-        d_optimizer = tf.train.AdamOptimizer(self.learning_rate_d, beta1=self.beta1)
-        g_optimizer = tf.train.AdamOptimizer(self.learning_rate_g, beta1=self.beta1)
-        vae_optimizer = tf.train.AdamOptimizer(self.learning_rate_vae, beta1=self.beta1)
+        # Use ADAM optimizer
+        with tf.variable_scope(self.model_name + "_opt", reuse=tf.AUTO_REUSE) as scope:
+            d_real_optimizer = tf.train.AdamOptimizer(
+                self.learning_rate_d, beta1=self.beta1
+            )
+            d_optimizer = tf.train.AdamOptimizer(self.learning_rate_d, beta1=self.beta1)
+            g_optimizer = tf.train.AdamOptimizer(self.learning_rate_g, beta1=self.beta1)
+            vae_optimizer = tf.train.AdamOptimizer(
+                self.learning_rate_vae, beta1=self.beta1
+            )
 
-        self.d_opt_real = d_real_optimizer.apply_gradients(
-            zip(d_opt_real_grads, self.d_vars)
-        )
-        self.d_opt = d_optimizer.apply_gradients(zip(d_opt_grads, self.d_vars))
-        self.g_opt = g_optimizer.apply_gradients(zip(g_opt_grads, self.both_vars))
-        self.vae_opt = vae_optimizer.apply_gradients(zip(vae_opt_grads, self.q_vars))
+            self.d_opt_real = d_real_optimizer.apply_gradients(
+                zip(d_opt_real_grads, self.d_vars)
+            )
+            self.d_opt = d_optimizer.apply_gradients(zip(d_opt_grads, self.d_vars))
+            self.g_opt = g_optimizer.apply_gradients(zip(g_opt_grads, self.both_vars))
+            self.vae_opt = vae_optimizer.apply_gradients(
+                zip(vae_opt_grads, self.q_vars)
+            )
 
         """
     self.d_opt_real = tf.train.AdamOptimizer(self.learning_rate_d, beta1=self.beta1) \
@@ -209,15 +215,29 @@ class CPPNVAE:
     """
 
         self.init()
-        self.saver = tf.train.Saver(tf.all_variables())
+        # self.saver = tf.train.Saver(tf.all_variables())
 
     def init(self):
-
-        # Initializing the tensor flow variables
-        init = tf.initialize_all_variables()
         # Launch the session
         self.sess = tf.InteractiveSession()
-        self.sess.run(init)
+
+        # init all vars
+        self.all_vars = tf.get_collection_ref(tf.GraphKeys.GLOBAL_VARIABLES)
+        self.sess.run(tf.variables_initializer(self.all_vars))
+
+        # filter to trainable vars, and include only those in the Saver
+        self.trainable_vars = [
+            v
+            for v in self.all_vars
+            if "beta1_power" not in v.name and "beta2_power" not in v.name
+        ]
+        self.saver = tf.train.Saver(var_list=self.trainable_vars, max_to_keep=50)
+
+        # # Initializing the tensor flow variables
+        # init = tf.initialize_all_variables()
+        # # Launch the session
+        # self.sess = tf.InteractiveSession()
+        # self.sess.run(init)
 
     def reinit(self):
         init = tf.initialize_variables(tf.trainable_variables())
