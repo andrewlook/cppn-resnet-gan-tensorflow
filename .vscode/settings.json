@@ -1,4 +1,4 @@
 {
   "python.formatting.provider": "black",
-  "python.pythonPath": "venv3/bin/python",
+  "python.pythonPath": "/Users/alook/code/resnet-cppn-gan-tensorflow/venv3/bin/python3.7",
 }
