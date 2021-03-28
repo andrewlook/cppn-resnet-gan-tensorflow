@@ -1,6 +1,6 @@
-import datetime
 import os
 import time
+from datetime import datetime
 
 import numpy as np
 import tensorflow as tf
@@ -282,6 +282,7 @@ class CPPNResnet:
         self.vae_loss = (
             tf.reduce_mean(latent_loss) / self.n_points
         )  # average over batch and pixel
+        self.summ_vae_loss = tf.summary.scalar("vae_loss", self.vae_loss)
 
     def create_gan_loss_terms(self):
         # Define loss function and optimiser
@@ -329,7 +330,17 @@ class CPPNResnet:
         # take the average of two d_loss to be the defacto d_loss
         self.d_loss = (
             10.0 * self.d_loss_real + self.d_loss_fake
-        ) / 11.0  # balanc out the classes
+        ) / 11.0  # balance out the classes
+        self.summ_d_loss = tf.summary.scalar("d_loss", self.d_loss)
+        self.summ_d_loss_fake = tf.summary.scalar("d_loss_fake", self.d_loss_fake)
+        self.summ_d_loss_real = tf.summary.scalar("d_loss_real", self.d_loss_real)
+        self.summ_d_loss_fake_accuracy = tf.summary.scalar(
+            "d_loss_fake_accuracy", self.d_loss_fake_accuracy
+        )
+        self.summ_d_loss_real_accuracy = tf.summary.scalar(
+            "d_loss_real_accuracy", self.d_loss_real_accuracy
+        )
+
         # cross entropy of generator fooling discriminiator that its shit is real.
         self.g_loss = tf.reduce_mean(
             -tf.reduce_sum(
@@ -346,6 +357,10 @@ class CPPNResnet:
                 ),
                 tf.float32,
             )
+        )
+        self.summ_g_loss = tf.summary.scalar("g_loss", self.g_loss)
+        self.summ_g_loss_accuracy = tf.summary.scalar(
+            "g_loss_accuracy", self.g_loss_accuracy
         )
 
     def coordinates(self, x_dim=32, y_dim=32, scale=1.0):

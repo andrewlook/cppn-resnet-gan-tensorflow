@@ -74,6 +74,7 @@ def train(args):
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
+    # TODO consider using same partitioning scheme as timestamped log dir (from model.py)
     with open(os.path.join(dirname, "config.pkl"), "wb") as f:
         cPickle.dump(args, f)
 
@@ -194,6 +195,16 @@ def train(args):
                 "avg_vae_loss=",
                 "{:.6f}".format(avg_vae_loss),
             )
+            cppn_resnet.writer.add_summary(
+                cppn_resnet.sess.run(cppn_resnet.summ_vae_loss), epoch
+            )
+            cppn_resnet.writer.add_summary(
+                cppn_resnet.sess.run(cppn_resnet.summ_d_loss), epoch
+            )
+            cppn_resnet.writer.add_summary(
+                cppn_resnet.sess.run(cppn_resnet.summ_g_loss), epoch
+            )
+            cppn_resnet.writer.flush()
 
         # save model
         if epoch >= 0 and epoch % checkpoint_step == 0:
@@ -201,6 +212,7 @@ def train(args):
             cppn_resnet.save_model(checkpoint_path, epoch)
             print("model saved to {}".format(checkpoint_path))
 
+    cppn_resnet.writer.close()
     # save model one last time, under zero label to denote finish.
     cppn_resnet.save_model(checkpoint_path, 0)
 
