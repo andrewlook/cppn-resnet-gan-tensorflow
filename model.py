@@ -1,3 +1,4 @@
+import datetime
 import os
 import time
 
@@ -233,15 +234,13 @@ class CPPNResnet:
         ]
         self.saver = tf.train.Saver(var_list=self.trainable_vars, max_to_keep=50)
 
-        # # Initializing the tensor flow variables
-        # init = tf.initialize_all_variables()
-        # # Launch the session
-        # self.sess = tf.InteractiveSession()
-        # self.sess.run(init)
+        # initialize writer for tensorboard logs
+        self.logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.writer = tf.summary.FileWriter(self.logdir)
 
     def reinit(self):
-        init = tf.initialize_variables(tf.trainable_variables())
-        self.sess.run(init)
+        self.all_vars = tf.get_collection_ref(tf.GraphKeys.GLOBAL_VARIABLES)
+        self.sess.run(tf.variables_initializer(self.all_vars))
 
     def to_one_hot(self, label):
         # convert labels, a numpy list of labels (of size batch_size) to the one hot equivalent
