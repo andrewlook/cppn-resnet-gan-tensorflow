@@ -49,6 +49,7 @@ class CPPNResnet:
         df_dim=32,
         model_name="cppn_resnet",
         grad_clip=5.0,
+        logdir="save",
     ):
         """
 
@@ -235,8 +236,6 @@ class CPPNResnet:
         self.saver = tf.train.Saver(var_list=self.trainable_vars, max_to_keep=50)
 
         # initialize writer for tensorboard logs
-        self.logdir = "logs/"
-        # self.logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
         self.writer = tf.summary.FileWriter(self.logdir)
 
     def reinit(self):

@@ -89,7 +89,9 @@ def train(args):
         learning_rate_vae=learning_rate_vae,
         beta1=beta1,
         keep_prob=keep_prob,
+        logdir=save_dir,
     )
+    #logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # load previously trained model if appilcable
     ckpt = tf.train.get_checkpoint_state(dirname)
