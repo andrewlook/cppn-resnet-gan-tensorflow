@@ -91,6 +91,7 @@ class CPPNResnet:
         self.df_dim = df_dim
         self.num_class = 11  # 0->9 are MNIST classes, 10 are fake digits.
         self.grad_clip = grad_clip
+        self.logdir = logdir
 
         # tf Graph batch of image (batch_size, height, width, depth)
         self.batch = tf.placeholder(tf.float32, [batch_size, x_dim, y_dim, c_dim])
