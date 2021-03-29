@@ -28,7 +28,7 @@ def main():
         "--training_epochs", type=int, default=3000, help="training epochs"
     )
     parser.add_argument("--display_step", type=int, default=1, help="display step")
-    parser.add_argument("--save_dir", type=string, default="save", help="display step")
+    parser.add_argument("--save_dir", type=str, default="save", help="display step")
     parser.add_argument(
         "--checkpoint_step", type=int, default=1, help="checkpoint step"
     )
