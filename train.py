@@ -28,6 +28,7 @@ def main():
         "--training_epochs", type=int, default=3000, help="training epochs"
     )
     parser.add_argument("--display_step", type=int, default=1, help="display step")
+    parser.add_argument("--save_dir", type=string, default="save", help="display step")
     parser.add_argument(
         "--checkpoint_step", type=int, default=1, help="checkpoint step"
     )
@@ -70,7 +71,7 @@ def train(args):
     )  # save training results every check point step
     beta1 = args.beta1
     keep_prob = args.keep_prob
-    dirname = "save"
+    dirname = args.save_dir
     if not os.path.exists(dirname):
         os.makedirs(dirname)
 
