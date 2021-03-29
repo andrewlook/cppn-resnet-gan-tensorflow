@@ -30,7 +30,6 @@ import numpy as np
 import PIL
 import pylab
 import tensorflow as tf
-from images2gif import writeGif
 from PIL import Image
 
 from model import CPPNResnet
@@ -164,11 +163,11 @@ class Sampler:
             img_data_array.append(self.generate(z, x_dim, y_dim, scale))
         return img_data_array
 
-    # def save_anim_gif(self, img_data_array, filename, duration = 0.1):
-    #   '''
-    #   this saves an animated gif given a list of img_data (numpy arrays)
-    #   '''
-    #   images = []
-    #   for i in range(len(img_data_array)):
-    #     images.append(self.to_image(img_data_array[i]))
-    #   writeGif(filename, images, duration = duration)
+    def to_anim_images(self, img_data_array, filename, duration=0.1):
+        """
+        this saves an animated gif given a list of img_data (numpy arrays)
+        """
+        images = []
+        for i in range(len(img_data_array)):
+            images.append(self.to_image(img_data_array[i]))
+        return images
