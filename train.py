@@ -6,8 +6,8 @@ import numpy as np
 import tensorflow as tf
 from six.moves import cPickle
 
-from mnist_data import *
-from model import CPPNResnet
+from .mnist_data import *
+from .model import CPPNResnet
 
 """
 cppn vae:
@@ -91,7 +91,7 @@ def train(args):
         keep_prob=keep_prob,
         logdir=dirname,
     )
-    #logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
+    # logdir = "logs/" + datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # load previously trained model if appilcable
     ckpt = tf.train.get_checkpoint_state(dirname)

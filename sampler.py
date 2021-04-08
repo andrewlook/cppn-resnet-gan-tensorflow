@@ -17,6 +17,13 @@ usage:
 
 %run -i sampler.py
 
+###
+mgc = get_ipython().magic
+mgc(u"matplotlib inline")
+mgc(u"run -i mnist_data.py")
+pylab.rcParams["figure.figsize"] = (10.0, 10.0)
+###
+
 sampler = Sampler()
 
 """
@@ -31,12 +38,7 @@ import pylab
 import tensorflow as tf
 from PIL import Image
 
-from model import CPPNResnet
-
-mgc = get_ipython().magic
-mgc(u"matplotlib inline")
-mgc(u"run -i mnist_data.py")
-pylab.rcParams["figure.figsize"] = (10.0, 10.0)
+from .model import CPPNResnet
 
 
 class Sampler:

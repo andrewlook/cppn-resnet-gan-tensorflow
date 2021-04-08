@@ -5,7 +5,7 @@ from datetime import datetime
 import numpy as np
 import tensorflow as tf
 
-from ops import *
+from .ops import *
 
 """
 cppgan-vae
