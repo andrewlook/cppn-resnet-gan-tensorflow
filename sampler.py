@@ -43,7 +43,7 @@ from .model import CPPNResnet
 
 class Sampler:
     def __init__(self, resnet, _dataset=None):
-        self._model = vae
+        self._model = resnet
         if _dataset:
             self._dataset = _dataset
         else:
