@@ -42,17 +42,15 @@ from .model import CPPNResnet
 
 
 class Sampler:
-    def __init__(self):
-        self._dataset = None
-        self._model = CPPNResnet()
+    def __init__(self, resnet, _dataset=None):
+        self._model = vae
+        if _dataset:
+            self._dataset = _dataset
+        else:
+            self._dataset = dataset.read_data_sets()
         self.z = self.generate_z()
 
-    def load_model(self):
-        self._model.load_model("save")
-
     def get_random_mnist(self, with_label=False):
-        if self._dataset == None:
-            self._dataset = read_data_sets()
         if with_label == True:
             data, label = self._dataset.next_batch(1, with_label)
             return data[0], label[0]

@@ -47,8 +47,8 @@ class CPPNResnet:
         net_size_q=512,
         keep_prob=1.0,
         df_dim=32,
-        model_name="cppn_resnet",
         grad_clip=5.0,
+        model_name="cppn_resnet",
         logdir="save",
     ):
         """
@@ -657,18 +657,26 @@ class CPPNResnet:
         )
         return image
 
-    def save_model(self, checkpoint_path, epoch):
-        """ saves the model to a file """
-        self.saver.save(self.sess, checkpoint_path, global_step=epoch)
+    def save_model(self, save_dir, epoch):
+        self.saver.save(self.sess, save_dir, global_step=epoch)
 
-    def load_model(self, checkpoint_path):
+    def load_model(self, save_dir, model_version_to_load=None):
+        ckpt = tf.train.get_checkpoint_state(save_dir)
+        print("found model: ", ckpt)
 
-        ckpt = tf.train.get_checkpoint_state(checkpoint_path)
-        print("loading model: ", ckpt.model_checkpoint_path)
+        model_checkpoint_path = ckpt.model_checkpoint_path
 
-        # self.saver.restore(self.sess, checkpoint_path+'/'+ckpt.model_checkpoint_path)
-        # use the below line for tensorflow 0.7
-        self.saver.restore(self.sess, ckpt.model_checkpoint_path)
+        if model_version_to_load:
+            model_checkpoint_path = os.path.join(
+                save_dir, f"model.ckpt-{model_version_to_load}"
+            )
+            if not os.path.isfile(model_checkpoint_path):
+                raise Exception(f"not a file: {model_checkpoint_path}")
+            if model_checkpoint_path not in ckpt.all_model_checkpoint_paths:
+                raise Exception(f"request one of: {ckpt.all_model_checkpoint_paths}")
+
+        print(f"loading model checkpoint: {model_checkpoint_path}")
+        self.saver.restore(self.sess, model_checkpoint_path))
 
     def close(self):
         self.sess.close()
