@@ -670,13 +670,13 @@ class CPPNResnet:
             model_checkpoint_path = os.path.join(
                 save_dir, f"model.ckpt-{model_version_to_load}"
             )
-            if not os.path.isfile(model_checkpoint_path):
-                raise Exception(f"not a file: {model_checkpoint_path}")
+            if not os.path.isfile(model_checkpoint_path + ".meta"):
+                raise Exception(f"not a file: {model_checkpoint_path}.meta")
             if model_checkpoint_path not in ckpt.all_model_checkpoint_paths:
                 raise Exception(f"request one of: {ckpt.all_model_checkpoint_paths}")
 
         print(f"loading model checkpoint: {model_checkpoint_path}")
-        self.saver.restore(self.sess, model_checkpoint_path))
+        self.saver.restore(self.sess, model_checkpoint_path)
 
     def close(self):
         self.sess.close()
